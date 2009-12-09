@@ -37,22 +37,14 @@ newtype Position a = Position [a] deriving (Eq,Show)
 -- @-node:gcross.20091208183517.1583:Position
 -- @-node:gcross.20091208183517.1560:Types
 -- @+node:gcross.20091208183517.1459:Quantum Operators
--- @+node:gcross.20091208183517.1460:r_, x, y, z
+-- @+node:gcross.20091208183517.1460:r_
 r_ :: Num a => Coordinate -> DifferentialOperator a
 r_ = multiplyByCoordinate
-x = r_ X
-y = r_ Y
-z = r_ Z
--- @-node:gcross.20091208183517.1460:r_, x, y, z
--- @+node:gcross.20091208183517.1461:px, py, pz
+-- @-node:gcross.20091208183517.1460:r_
+-- @+node:gcross.20091208183517.1461:p_
 p_ :: RealFloat a => Coordinate -> DifferentialOperator (Complex a)
 p_ k = (-i) *| d k
-
-px, py, pz :: RealFloat a => DifferentialOperator (Complex a)
-px = p_ X
-py = p_ Y
-pz = p_ Z
--- @-node:gcross.20091208183517.1461:px, py, pz
+-- @-node:gcross.20091208183517.1461:p_
 -- @-node:gcross.20091208183517.1459:Quantum Operators
 -- @+node:gcross.20091208183517.1555:Instances
 -- @+node:gcross.20091208183517.1582:Arbitrary Coordinate

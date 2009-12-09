@@ -96,6 +96,7 @@ infixl 6 |+|, |-|
 (|-|) = liftA2 (-)
 -- @-node:gcross.20091208183517.1452:|-|/|+|
 -- @+node:gcross.20091208183517.1454:osum/negosum
+osum, negosum :: Num a => [DifferentialOperator a] -> DifferentialOperator a
 osum = foldl1 (|+|)
 negosum = ((-1) *|) . osum
 -- @-node:gcross.20091208183517.1454:osum/negosum
