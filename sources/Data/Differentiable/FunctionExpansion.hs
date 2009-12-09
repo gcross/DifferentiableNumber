@@ -4,6 +4,7 @@
 
 -- @<< Language extensions >>
 -- @+node:gcross.20091208183517.1565:<< Language extensions >>
+{-# LANGUAGE TypeSynonymInstances #-}
 -- @-node:gcross.20091208183517.1565:<< Language extensions >>
 -- @nl
 
@@ -36,15 +37,15 @@ type DifferentialOperatorTransformation a = DifferentialOperator a -> Differenti
 instance Differentiable (FunctionExpansion a) where
     differentiateBy index (argument :-> expansion) = argument :-> d index expansion
 -- @-node:gcross.20091208183517.1430:Differentiable
--- @+node:gcross.20091208183517.1440:Show (Differentiable a)
+-- @+node:gcross.20091208183517.1440:Show (FunctionExpansion a)
 instance Show a => Show (FunctionExpansion a) where
     show (argument :-> value) = show argument ++ " :-> " ++ show value
--- @-node:gcross.20091208183517.1440:Show (Differentiable a)
--- @+node:gcross.20091208183517.1449:Eq (Differentiable a)
+-- @-node:gcross.20091208183517.1440:Show (FunctionExpansion a)
+-- @+node:gcross.20091208183517.1449:Eq (FunctionExpansion a)
 instance Eq a => Eq (FunctionExpansion a) where
-    (argument1 :-> value1) == (argument2 :-> value2) = argument1 == argument2 && value1 == value2
--- @-node:gcross.20091208183517.1449:Eq (Differentiable a)
--- @+node:gcross.20091208183517.1436:Num (Differentiable a)
+    (_ :-> value1) == (_ :-> value2) = value1 == value2
+-- @-node:gcross.20091208183517.1449:Eq (FunctionExpansion a)
+-- @+node:gcross.20091208183517.1436:Num (FunctionExpansion a)
 instance Num a => Num (FunctionExpansion a) where
     (argument1 :-> expansion1) + (argument2 :-> expansion2) = assert (argument1 == argument2) $
         argument1 :-> (expansion1 + expansion2)
@@ -52,8 +53,8 @@ instance Num a => Num (FunctionExpansion a) where
         argument1 :-> (expansion1 - expansion2)
     (argument1 :-> expansion1) * (argument2 :-> expansion2) = assert (argument1 == argument2) $
         argument1 :-> (expansion1 * expansion2)
-    fromInteger value = undefined :-> (constant . fromInteger $ value)
--- @-node:gcross.20091208183517.1436:Num (Differentiable a)
+    fromInteger value = [] :-> (constant . fromInteger $ value)
+-- @-node:gcross.20091208183517.1436:Num (FunctionExpansion a)
 -- @-node:gcross.20091208183517.1429:Instances
 -- @+node:gcross.20091208183517.1427:Differential Operators
 -- @+node:gcross.20091208183517.1431:multiplyByCoordinate

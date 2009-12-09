@@ -19,6 +19,7 @@
 <v t="gcross.20091208183517.1406"><vh>@thin FunctionExpansion.hs</vh></v>
 <v t="gcross.20091208160243.1233"><vh>@thin Number.hs</vh></v>
 <v t="gcross.20091208183517.1432"><vh>@thin Quantum3D.hs</vh></v>
+<v t="gcross.20091209122152.1337"><vh>@thin Testing.hs</vh></v>
 </v>
 </v>
 </v>

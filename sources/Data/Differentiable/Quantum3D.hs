@@ -6,6 +6,8 @@ module Data.Differentiable.Quantum3D where
 
 -- @<< Import needed modules >>
 -- @+node:gcross.20091208183517.1447:<< Import needed modules >>
+import Data.Complex
+
 import Data.Tree
 
 import Test.QuickCheck.Arbitrary
@@ -20,6 +22,12 @@ import Data.Differentiable.Number
 -- @nl
 
 -- @+others
+-- @+node:gcross.20091209122152.1332:Values
+-- @+node:gcross.20091209122152.1333:i
+i :: RealFloat a => Complex a
+i = 0 :+ 1
+-- @-node:gcross.20091209122152.1333:i
+-- @-node:gcross.20091209122152.1332:Values
 -- @+node:gcross.20091208183517.1560:Types
 -- @+node:gcross.20091208183517.1561:Coordinate
 data Coordinate = X | Y | Z deriving (Eq,Show,Enum)
@@ -28,19 +36,24 @@ data Coordinate = X | Y | Z deriving (Eq,Show,Enum)
 newtype Position a = Position [a] deriving (Eq,Show)
 -- @-node:gcross.20091208183517.1583:Position
 -- @-node:gcross.20091208183517.1560:Types
--- @+node:gcross.20091208183517.1459:Operators
--- @+node:gcross.20091208183517.1460:x, y, z
-x = multiplyByCoordinate 0
-y = multiplyByCoordinate 1
-z = multiplyByCoordinate 2
--- @-node:gcross.20091208183517.1460:x, y, z
+-- @+node:gcross.20091208183517.1459:Quantum Operators
+-- @+node:gcross.20091208183517.1460:r_, x, y, z
+r_ :: Num a => Coordinate -> DifferentialOperator a
+r_ = multiplyByCoordinate
+x = r_ X
+y = r_ Y
+z = r_ Z
+-- @-node:gcross.20091208183517.1460:r_, x, y, z
 -- @+node:gcross.20091208183517.1461:px, py, pz
-px, py, pz :: DifferentialOperator a
-px = d 0
-py = d 1
-pz = d 2
+p_ :: RealFloat a => Coordinate -> DifferentialOperator (Complex a)
+p_ k = (-i) *| d k
+
+px, py, pz :: RealFloat a => DifferentialOperator (Complex a)
+px = p_ X
+py = p_ Y
+pz = p_ Z
 -- @-node:gcross.20091208183517.1461:px, py, pz
--- @-node:gcross.20091208183517.1459:Operators
+-- @-node:gcross.20091208183517.1459:Quantum Operators
 -- @+node:gcross.20091208183517.1555:Instances
 -- @+node:gcross.20091208183517.1582:Arbitrary Coordinate
 instance Arbitrary Coordinate where
