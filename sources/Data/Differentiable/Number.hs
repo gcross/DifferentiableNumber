@@ -6,9 +6,17 @@ module Data.Differentiable.Number where
 
 -- @<< Import needed modules >>
 -- @+node:gcross.20091208160243.1239:<< Import needed modules >>
+import Control.Monad
+
 import Data.Differentiable
+import qualified Data.Stream as Stream
+
+import Data.List
+import Data.Tree
 
 import System.Random
+
+import Test.QuickCheck
 -- @-node:gcross.20091208160243.1239:<< Import needed modules >>
 -- @nl
 
@@ -72,22 +80,24 @@ instance Num a => Num (DifferentiableNumber a) where
                                           (map (number2*) derivatives1)
     fromInteger value = fromInteger value ::> repeat zero
 -- @-node:gcross.20091208160243.1243:Num
--- @+node:gcross.20091208183517.1464:Random
-instance (Num a, Random a) => Random (DifferentiableNumber a) where
-    randomR (lo ::> lodiffs,hi ::> hidiffs) gen =
-        let (gen1,gen2) = split gen
-            (value,returned_gen) = randomR (lo,hi) gen1
-            diffs = go lodiffs hidiffs gen2
-              where
-                go [] _ _ = []
-                go _ [] _ = []
-                go (lodiff:rest_lodiffs) (hidiff:rest_hidiffs) old_gen =
-                    let (diff,new_gen) = randomR (lodiff,hidiff) old_gen
-                    in diff:go rest_lodiffs rest_hidiffs new_gen
-        in (value ::> diffs,returned_gen)
-    random = randomR (zero,forAllDerivatives 1)
--- @-node:gcross.20091208183517.1464:Random
 -- @-node:gcross.20091208160243.1240:Instances
+-- @+node:gcross.20091209020922.1337:Generators
+-- @+node:gcross.20091209020922.1339:Arbitrary (Tree a)
+instance Arbitrary a => Arbitrary (Tree a) where
+    arbitrary = liftM2 Node arbitrary (fmap Stream.toList arbitrary)
+-- @-node:gcross.20091209020922.1339:Arbitrary (Tree a)
+-- @+node:gcross.20091209020922.1341:Arbitrary (DifferentiableNumber a)
+instance Arbitrary a => Arbitrary (DifferentiableNumber a) where
+    arbitrary = fmap (extractDerivatives []) arbitrary
+      where
+        extractDerivatives :: [Int] -> Tree a -> DifferentiableNumber a
+        extractDerivatives branchings tree =
+            go branchings tree ::> map (flip extractDerivatives tree . flip insert branchings) [0..]
+
+        go [] node = rootLabel node
+        go (next:rest) node = go rest ((subForest node) !! next)
+-- @-node:gcross.20091209020922.1341:Arbitrary (DifferentiableNumber a)
+-- @-node:gcross.20091209020922.1337:Generators
 -- @-others
 -- @-node:gcross.20091208160243.1233:@thin Number.hs
 -- @-leo

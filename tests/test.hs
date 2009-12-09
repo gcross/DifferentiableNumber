@@ -50,6 +50,13 @@ main = defaultMain
         ,testProperty "Product rule" $
             \(f :: FunctionExpansion Integer) (g :: FunctionExpansion Integer)  (i :: Coordinate) -> d i (f*g) == d i f * g + f * d i g
         -- @-node:gcross.20091208183517.1581:Product rule
+        -- @+node:gcross.20091209020922.1342:Exchange rule
+        ,testProperty "Exchange rule" $
+            \(f :: FunctionExpansion Integer)
+             (i :: Coordinate)
+             (j :: Coordinate)
+             -> (d i . d j) f == (d j . d i) f
+        -- @-node:gcross.20091209020922.1342:Exchange rule
         -- @-others
         ]
     -- @-node:gcross.20091208183517.1577:Total derivatives

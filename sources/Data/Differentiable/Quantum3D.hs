@@ -6,15 +6,16 @@ module Data.Differentiable.Quantum3D where
 
 -- @<< Import needed modules >>
 -- @+node:gcross.20091208183517.1447:<< Import needed modules >>
-import Data.Differentiable
-import Data.Differentiable.FunctionExpansion
-import Data.Differentiable.Number
+import Data.Tree
 
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Gen
 
 import System.Random
--- @nonl
+
+import Data.Differentiable
+import Data.Differentiable.FunctionExpansion
+import Data.Differentiable.Number
 -- @-node:gcross.20091208183517.1447:<< Import needed modules >>
 -- @nl
 
@@ -49,10 +50,6 @@ instance Arbitrary Coordinate where
 instance Arbitrary a => Arbitrary (Position a) where
     arbitrary = fmap Position (vectorOf 3 arbitrary)
 -- @-node:gcross.20091208183517.1584:Arbitrary Position
--- @+node:gcross.20091208183517.1557:Arbitrary (DifferentiableNumber a)
-instance (Num a, Random a) => Arbitrary (DifferentiableNumber a) where
-    arbitrary = MkGen $ \gen size -> fst . randomR (zero,forFinitelyManyDerivatives 3 (fromIntegral size)) $ gen
--- @-node:gcross.20091208183517.1557:Arbitrary (DifferentiableNumber a)
 -- @+node:gcross.20091208183517.1569:Arbitrary (FunctionExpansion a)
 instance (Num a, Random a, Arbitrary a) => Arbitrary (FunctionExpansion a) where
     arbitrary = MkGen $ \gen size ->

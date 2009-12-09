@@ -8,7 +8,9 @@ Build-Type:     Custom
 
 Library
     Build-Depends:  base == 4.1.*,
+                    containers == 0.2.*,
                     Blueprint >= 0.2,
-                    QuickCheck == 2.*
+                    QuickCheck == 2.*,
+                    Stream == 0.4.*
 -- @-node:gcross.20091208183517.1493:@thin DifferentiableNumber.cabal
 -- @-leo
