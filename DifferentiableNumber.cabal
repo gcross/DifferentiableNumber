@@ -1,0 +1,14 @@
+-- @+leo-ver=4-thin
+-- @+node:gcross.20091208183517.1493:@thin DifferentiableNumber.cabal
+-- @@language Haskell
+Name:           DifferentiableNumber
+Version:        0.1
+Cabal-Version:  >= 1.6
+Build-Type:     Custom
+
+Library
+    Build-Depends:  base == 4.1.*,
+                    Blueprint >= 0.2,
+                    QuickCheck == 2.*
+-- @-node:gcross.20091208183517.1493:@thin DifferentiableNumber.cabal
+-- @-leo
