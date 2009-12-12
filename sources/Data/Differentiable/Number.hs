@@ -50,6 +50,15 @@ forAllDerivatives value = value ::> repeat (forAllDerivatives value)
 forFinitelyManyDerivatives :: Int -> a -> DifferentiableNumber a
 forFinitelyManyDerivatives count value = value ::> replicate count (forFinitelyManyDerivatives count value)
 -- @-node:gcross.20091208183517.1559:forFinitelyManyDerivatives
+-- @+node:gcross.20091212141130.1420:invokeChainRule
+invokeChainRule ::
+    Num a =>
+    (a -> a) ->
+    (DifferentiableNumber a -> DifferentiableNumber a) ->
+    DifferentiableNumber a -> DifferentiableNumber a
+invokeChainRule function derivative argument@(value ::> derivatives) =
+    function value ::> map (* derivative argument) derivatives
+-- @-node:gcross.20091212141130.1420:invokeChainRule
 -- @-node:gcross.20091208183517.1423:Functions
 -- @+node:gcross.20091208160243.1234:Types
 -- @+node:gcross.20091208160243.1236:DifferentiableNumber
@@ -69,6 +78,10 @@ instance Show a => Show (DifferentiableNumber a) where
 instance Eq a => Eq (DifferentiableNumber a) where
     (value1 ::> _) == (value2 ::> _) = value1 == value2
 -- @-node:gcross.20091208160243.1242:Eq
+-- @+node:gcross.20091212141130.1446:Ord
+instance Ord a => Ord (DifferentiableNumber a) where
+    compare (value1 ::> _) (value2 ::> _) = compare value1 value2
+-- @-node:gcross.20091212141130.1446:Ord
 -- @+node:gcross.20091208160243.1243:Num
 instance Num a => Num (DifferentiableNumber a) where
     (value1 ::> derivatives1) + (value2 ::> derivatives2) =
@@ -78,8 +91,37 @@ instance Num a => Num (DifferentiableNumber a) where
     number1@(value1 ::> derivatives1) * number2@(value2 ::> derivatives2) =
         (value1 * value2) ::> zipWith (+) (map (number1*) derivatives2)
                                           (map (number2*) derivatives1)
-    fromInteger value = fromInteger value ::> repeat zero
+    negate (value ::> derivatives) =
+        negate value ::> map negate derivatives
+
+    fromInteger = constant . fromInteger
 -- @-node:gcross.20091208160243.1243:Num
+-- @+node:gcross.20091212141130.1418:Fractional
+instance Fractional a => Fractional (DifferentiableNumber a) where
+    recip = invokeChainRule recip (\x -> -(recip x)*(recip x))
+
+    fromRational = constant . fromRational
+-- @-node:gcross.20091212141130.1418:Fractional
+-- @+node:gcross.20091212141130.1419:Floating
+instance Floating a => Floating (DifferentiableNumber a) where
+    pi = constant pi
+
+    exp = invokeChainRule exp exp
+    sqrt = invokeChainRule sqrt (\x -> constant 0.5 * recip (sqrt x))
+    log = invokeChainRule log recip
+    sin = invokeChainRule sin cos
+    cos = invokeChainRule cos (negate . sin)
+    tan = invokeChainRule tan (\x -> recip (cos x * cos x))
+    asin = invokeChainRule asin (\x -> (recip . sqrt) (one - x*x))
+    acos = invokeChainRule acos (\x -> (negate . recip . sqrt) (one - x*x))
+    atan = invokeChainRule atan (\x -> recip (one + x*x))
+    sinh = invokeChainRule sinh cosh
+    cosh = invokeChainRule cosh sinh
+    tanh = invokeChainRule tanh (\x -> one - (tanh x)*(tanh x))
+    asinh = invokeChainRule asin (\x -> (recip . sqrt) (x*x + 1))
+    acosh = invokeChainRule acos (\x -> (recip . sqrt) (x*x - 1))
+    atanh = invokeChainRule atan (\x -> recip (one - x*x))
+-- @-node:gcross.20091212141130.1419:Floating
 -- @-node:gcross.20091208160243.1240:Instances
 -- @+node:gcross.20091209020922.1337:Generators
 -- @+node:gcross.20091209020922.1339:Arbitrary (Tree a)

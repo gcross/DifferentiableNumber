@@ -10,6 +10,7 @@ import Control.Applicative
 import Control.Monad
 
 import Data.Complex
+import Data.Ratio
 
 import Debug.Trace
 
@@ -73,6 +74,17 @@ instance (Random a, RealFloat a) => Random (Complex a) where
             (i,g2) = random g1
         in (r :+ i,g2)
 -- @-node:gcross.20091209122152.1464:Random (Complex a)
+-- @+node:gcross.20091212141130.1442:Random (Rational a)
+instance (Integral a, Random a) => Random (Ratio a) where
+    randomR (lo,hi) g0 =
+        let (n,g1) = randomR (numerator lo,numerator hi) g0
+            (d,g2) = randomR (denominator lo,denominator hi) g1
+        in (n % d,g2)
+    random g0 =
+        let (n,g1) = random g0
+            (d,g2) = random g1
+        in (n % d,g2)
+-- @-node:gcross.20091212141130.1442:Random (Rational a)
 -- @-node:gcross.20091209122152.1462:Instances
 -- @+node:gcross.20091209122152.1459:Generators
 -- @+node:gcross.20091209122152.1461:Complex Double

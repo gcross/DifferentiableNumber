@@ -45,17 +45,63 @@ instance Show a => Show (FunctionExpansion a) where
 instance Eq a => Eq (FunctionExpansion a) where
     (_ :-> value1) == (_ :-> value2) = value1 == value2
 -- @-node:gcross.20091208183517.1449:Eq (FunctionExpansion a)
+-- @+node:gcross.20091212141130.1444:Ord (FunctionExpansion a)
+instance Ord a => Ord (FunctionExpansion a) where
+    compare (_ :-> value1) (_ :-> value2) = compare value1 value2
+-- @-node:gcross.20091212141130.1444:Ord (FunctionExpansion a)
 -- @+node:gcross.20091208183517.1436:Num (FunctionExpansion a)
 instance Num a => Num (FunctionExpansion a) where
-    (argument1 :-> expansion1) + (argument2 :-> expansion2) = assert (argument1 == argument2) $
-        argument1 :-> (expansion1 + expansion2)
-    (argument1 :-> expansion1) - (argument2 :-> expansion2) = assert (argument1 == argument2) $
-        argument1 :-> (expansion1 - expansion2)
-    (argument1 :-> expansion1) * (argument2 :-> expansion2) = assert (argument1 == argument2) $
-        argument1 :-> (expansion1 * expansion2)
+    (+) = binaryFunctionExpansionOperator (+)
+    (-) = binaryFunctionExpansionOperator (-)
+    (*) = binaryFunctionExpansionOperator (*)
+    negate = unaryFunctionExpansionOperator negate
     fromInteger value = [] :-> (constant . fromInteger $ value)
 -- @-node:gcross.20091208183517.1436:Num (FunctionExpansion a)
+-- @+node:gcross.20091212141130.1438:Fractional (FunctionExpansion a)
+instance Fractional a => Fractional (FunctionExpansion a) where
+    (/) = binaryFunctionExpansionOperator (/)
+    recip = unaryFunctionExpansionOperator recip
+    fromRational value = [] :-> (constant . fromRational $ value)
+
+-- @-node:gcross.20091212141130.1438:Fractional (FunctionExpansion a)
+-- @+node:gcross.20091212141130.1440:Floating (FunctionExpansion a)
+instance Floating a => Floating (FunctionExpansion a) where
+    pi = [] :-> constant pi
+    exp = unaryFunctionExpansionOperator exp
+    sqrt = unaryFunctionExpansionOperator sqrt
+    log = unaryFunctionExpansionOperator log
+    (**) = binaryFunctionExpansionOperator (**)
+    logBase = binaryFunctionExpansionOperator logBase
+    sin = unaryFunctionExpansionOperator sin
+    cos = unaryFunctionExpansionOperator cos
+    tan = unaryFunctionExpansionOperator tan
+    asin = unaryFunctionExpansionOperator asin
+    acos = unaryFunctionExpansionOperator acos
+    atan = unaryFunctionExpansionOperator atan
+    sinh = unaryFunctionExpansionOperator sinh
+    cosh = unaryFunctionExpansionOperator cosh
+    asinh = unaryFunctionExpansionOperator asinh
+    atanh = unaryFunctionExpansionOperator atanh
+    acosh = unaryFunctionExpansionOperator acosh
+-- @-node:gcross.20091212141130.1440:Floating (FunctionExpansion a)
 -- @-node:gcross.20091208183517.1429:Instances
+-- @+node:gcross.20091212141130.1433:Functions
+-- @+node:gcross.20091212141130.1434:unaryFunctionExpansionOperator
+unaryFunctionExpansionOperator ::
+    (DifferentiableNumber a -> DifferentiableNumber a) ->
+    FunctionExpansion a -> FunctionExpansion a
+unaryFunctionExpansionOperator op (argument :-> value) = argument :-> op value
+-- @-node:gcross.20091212141130.1434:unaryFunctionExpansionOperator
+-- @+node:gcross.20091212141130.1436:binaryFunctionExpansionOperator
+binaryFunctionExpansionOperator ::
+    Eq a =>
+    (DifferentiableNumber a -> DifferentiableNumber a -> DifferentiableNumber a) ->
+    FunctionExpansion a -> FunctionExpansion a -> FunctionExpansion a
+binaryFunctionExpansionOperator op (argument1 :-> value1) (argument2 :-> value2) =
+    assert (argument1 == argument2) $
+        argument1 :-> (value1 `op` value2)
+-- @-node:gcross.20091212141130.1436:binaryFunctionExpansionOperator
+-- @-node:gcross.20091212141130.1433:Functions
 -- @+node:gcross.20091208183517.1427:Differential Operators
 -- @+node:gcross.20091208183517.1431:multiplyByCoordinate
 multiplyByCoordinate :: (Num a, Enum i) => i -> DifferentialOperator a

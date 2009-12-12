@@ -37,28 +37,66 @@ main = defaultMain
     -- @+node:gcross.20091208183517.1577:Total derivatives
     [testGroup "Total derivatives"
         -- @    @+others
-        -- @+node:gcross.20091208183517.1579:Constant rule
-        [testProperty "Constant rule" $
-            \(value :: Integer) (i :: Coordinate) -> d i (constant value) == 0
-        -- @-node:gcross.20091208183517.1579:Constant rule
-        -- @+node:gcross.20091208183517.1585:Variable rule
-        ,testProperty "Variable rule" $
-            \(value :: Integer) (i :: Coordinate) (j :: Coordinate) -> d i (variable j value) == if i == j then 1 else 0
-        -- @-node:gcross.20091208183517.1585:Variable rule
-        -- @+node:gcross.20091208183517.1580:Sum rule
-        ,testProperty "Sum rule" $
-            \(f :: FunctionExpansion Integer) (g :: FunctionExpansion Integer) (i :: Coordinate) -> d i (f+g) == d i f + d i g
-        -- @-node:gcross.20091208183517.1580:Sum rule
-        -- @+node:gcross.20091208183517.1581:Product rule
-        ,testProperty "Product rule" $
-            \(f :: FunctionExpansion Integer) (g :: FunctionExpansion Integer)  (i :: Coordinate) -> d i (f*g) == d i f * g + f * d i g
-        -- @-node:gcross.20091208183517.1581:Product rule
-        -- @+node:gcross.20091209122152.1330:Exchange rule
-        ,testProperty "Exchange rule" $
-            \(i :: Coordinate)
-             (j :: Coordinate)
-             -> d i ~~ d j === (0 :: Integer) *| id
-        -- @-node:gcross.20091209122152.1330:Exchange rule
+        -- @+node:gcross.20091212141130.1422:Identities
+        [testGroup "Identities"
+            -- @    @+others
+            -- @+node:gcross.20091208183517.1579:Constant rule
+            [testProperty "Constant rule" $
+                \(value :: Integer) (i :: Coordinate) -> d i (constant value) == 0
+            -- @-node:gcross.20091208183517.1579:Constant rule
+            -- @+node:gcross.20091208183517.1585:Variable rule
+            ,testProperty "Variable rule" $
+                \(value :: Integer) (i :: Coordinate) (j :: Coordinate) -> d i (variable j value) == if i == j then 1 else 0
+            -- @-node:gcross.20091208183517.1585:Variable rule
+            -- @+node:gcross.20091208183517.1580:Sum rule
+            ,testProperty "Sum rule" $
+                \(f :: FunctionExpansion Integer) (g :: FunctionExpansion Integer) (i :: Coordinate) -> d i (f+g) == d i f + d i g
+            -- @-node:gcross.20091208183517.1580:Sum rule
+            -- @+node:gcross.20091208183517.1581:Product rule
+            ,testProperty "Product rule" $
+                \(f :: FunctionExpansion Integer) (g :: FunctionExpansion Integer)  (i :: Coordinate) -> d i (f*g) == d i f * g + f * d i g
+            -- @-node:gcross.20091208183517.1581:Product rule
+            -- @+node:gcross.20091212141130.1432:Quotient rule
+            ,testProperty "Quotient rule" $
+                \(f :: FunctionExpansion Rational) (g :: FunctionExpansion Rational)  (i :: Coordinate) ->
+                    g > 0 ==> d i (f/g) == (d i f * g - f * d i g) / (g*g)
+            -- @-node:gcross.20091212141130.1432:Quotient rule
+            -- @+node:gcross.20091209122152.1330:Exchange rule
+            ,testProperty "Exchange rule" $
+                \(i :: Coordinate)
+                 (j :: Coordinate)
+                 -> d i ~~ d j === (0 :: Integer) *| id
+            -- @-node:gcross.20091209122152.1330:Exchange rule
+            -- @-others
+            ]
+        -- @-node:gcross.20091212141130.1422:Identities
+        -- @+node:gcross.20091212141130.1421:Functions
+        ,testGroup "Functions"
+            -- @    @+others
+            -- @+node:gcross.20091212141130.1424:exp
+            [testProperty "exp" $ mapSize (const 1) $
+                \argument@((value :: Double) ::> _) (i :: Coordinate) ->
+                    d i (exp argument) ~= constant (exp value) * d i argument
+            -- @-node:gcross.20091212141130.1424:exp
+            -- @+node:gcross.20091212141130.1426:sin
+            ,testProperty "sin" $ mapSize (const 1) $
+                \argument@((value :: Double) ::> _) (i :: Coordinate) ->
+                    d i (sin argument) ~= constant (cos value) * d i argument
+            -- @-node:gcross.20091212141130.1426:sin
+            -- @+node:gcross.20091212141130.1428:cos
+            ,testProperty "cos" $ mapSize (const 1) $
+                \argument@((value :: Double) ::> _) (i :: Coordinate) ->
+                    d i (cos argument) ~= constant (-sin value) * d i argument
+            -- @-node:gcross.20091212141130.1428:cos
+            -- @+node:gcross.20091212141130.1430:sqrt
+            ,testProperty "sqrt" $ mapSize (const 1) $
+                \argument@((value :: Double) ::> _) (i :: Coordinate) ->
+                    value > 0 ==>
+                        (d i (sqrt argument) ~= constant ((0.5 *) . recip . sqrt $ value) * d i argument)
+            -- @-node:gcross.20091212141130.1430:sqrt
+            -- @-others
+            ]
+        -- @-node:gcross.20091212141130.1421:Functions
         -- @-others
         ]
     -- @-node:gcross.20091208183517.1577:Total derivatives
