@@ -55,7 +55,7 @@ main = defaultMain
             -- @    @+others
             -- @+node:gcross.20091208183517.1579:Constant rule
             [testProperty "Constant rule" $
-                \(value :: Integer) (i :: Coordinate) -> d i (constant value) == 0
+                \(value :: Integer) (i :: Coordinate) -> d i (fromInteger value) == (0 :: DifferentiableNumber Integer) 
             -- @-node:gcross.20091208183517.1579:Constant rule
             -- @+node:gcross.20091208183517.1585:Variable rule
             ,testProperty "Variable rule" $

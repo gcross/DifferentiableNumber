@@ -21,21 +21,7 @@ import Test.QuickCheck
 -- @nl
 
 -- @+others
--- @+node:gcross.20091208183517.1421:Values
--- @+node:gcross.20091208183517.1422:zero
-zero :: Num a => DifferentiableNumber a
-zero = 0 ::> repeat zero
--- @-node:gcross.20091208183517.1422:zero
--- @+node:gcross.20091208183517.1566:one
-one :: Num a => DifferentiableNumber a
-one = constant 1
--- @-node:gcross.20091208183517.1566:one
--- @-node:gcross.20091208183517.1421:Values
 -- @+node:gcross.20091208183517.1423:Functions
--- @+node:gcross.20091208183517.1426:constant
-constant :: Num a => a -> DifferentiableNumber a
-constant value = value ::> repeat zero
--- @-node:gcross.20091208183517.1426:constant
 -- @+node:gcross.20091208183517.1567:variable
 variable :: (Enum i, Num a) => i -> a -> DifferentiableNumber a
 variable i value = value ::> (replicate index zero ++ [one] ++ repeat zero)
@@ -122,6 +108,10 @@ instance Floating a => Floating (DifferentiableNumber a) where
     acosh = invokeChainRule acos (\x -> (recip . sqrt) (x*x - 1))
     atanh = invokeChainRule atan (\x -> recip (one - x*x))
 -- @-node:gcross.20091212141130.1419:Floating
+-- @+node:gcross.20091212141130.1652:HasConstants
+instance HasConstants DifferentiableNumber where
+    constant value = value ::> repeat zero
+-- @-node:gcross.20091212141130.1652:HasConstants
 -- @-node:gcross.20091208160243.1240:Instances
 -- @+node:gcross.20091209020922.1337:Generators
 -- @+node:gcross.20091209020922.1339:Arbitrary (Tree a)

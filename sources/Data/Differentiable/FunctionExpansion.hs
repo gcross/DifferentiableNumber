@@ -85,6 +85,10 @@ instance Floating a => Floating (FunctionExpansion a) where
     atanh = unaryFunctionExpansionOperator atanh
     acosh = unaryFunctionExpansionOperator acosh
 -- @-node:gcross.20091212141130.1440:Floating
+-- @+node:gcross.20091212141130.1653:HasConstants
+instance HasConstants FunctionExpansion where
+    constant value = [] :-> constant value
+-- @-node:gcross.20091212141130.1653:HasConstants
 -- @-node:gcross.20091212141130.1582:FunctionExpansion
 -- @+node:gcross.20091212141130.1583:Function
 -- @+node:gcross.20091212141130.1597:Differentiable
@@ -133,6 +137,10 @@ instance Floating b => Floating (a -> b) where
     atanh = (.) atanh
     acosh = (.) acosh
 -- @-node:gcross.20091212141130.1593:Floating
+-- @+node:gcross.20091212141130.1655:HasConstants
+instance HasConstants ((->) a) where
+    constant value = const value
+-- @-node:gcross.20091212141130.1655:HasConstants
 -- @-node:gcross.20091212141130.1583:Function
 -- @-node:gcross.20091208183517.1429:Instances
 -- @+node:gcross.20091212141130.1433:Helpers
@@ -147,9 +155,8 @@ binaryFunctionExpansionOperator ::
     Eq a =>
     (DifferentiableNumber a -> DifferentiableNumber a -> DifferentiableNumber a) ->
     FunctionExpansion a -> FunctionExpansion a -> FunctionExpansion a
-binaryFunctionExpansionOperator op (argument1 :-> value1) (argument2 :-> value2) =
-    assert (argument1 == argument2) $
-        argument1 :-> (value1 `op` value2)
+binaryFunctionExpansionOperator op ([] :-> value1) (argument2 :-> value2) = argument2 :-> (value1 `op` value2)
+binaryFunctionExpansionOperator op (argument1 :-> value1) (_ :-> value2) = argument1 :-> (value1 `op` value2)
 -- @-node:gcross.20091212141130.1436:binaryFunctionExpansionOperator
 -- @-node:gcross.20091212141130.1433:Helpers
 -- @+node:gcross.20091208183517.1427:Differential Operators
@@ -162,10 +169,8 @@ multiplyByCoordinate i (argument :-> expansion) = argument :-> (variable index (
 -- @+node:gcross.20091208183517.1442:Operators
 -- @+node:gcross.20091208183517.1458:*|
 infixl 7 *|
-(*|) :: Num a => a -> DifferentialOperator a -> DifferentialOperator a
-(*|) value operator function =
-    let (arguments :-> expansion) = operator function
-    in  (arguments :-> (constant value * expansion))
+(*|) :: (HasConstants a, Num n, Num (a n)) => n -> (a n -> a n) -> (a n -> a n)
+(*|) value operator = const (constant value) * operator
 -- @-node:gcross.20091208183517.1458:*|
 -- @+node:gcross.20091208183517.1444:~~
 infixl 6 ~~
