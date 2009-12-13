@@ -172,6 +172,11 @@ infixl 7 *|
 (*|) :: (HasConstants a, Num n, Num (a n)) => n -> (a n -> a n) -> (a n -> a n)
 (*|) value operator = const (constant value) * operator
 -- @-node:gcross.20091208183517.1458:*|
+-- @+node:gcross.20091212141130.1804:*||
+infixl 7 *||
+(*||) :: (Num n, HasConstants b, Num (b n)) => n -> (a -> b n) -> a -> b n
+(*||) value function argument = constant value * function argument
+-- @-node:gcross.20091212141130.1804:*||
 -- @+node:gcross.20091208183517.1444:~~
 infixl 6 ~~
 (~~) :: Num a => DifferentialOperatorTransformation a
