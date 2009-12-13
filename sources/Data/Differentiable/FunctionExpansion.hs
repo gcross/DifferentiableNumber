@@ -174,7 +174,7 @@ a ~~ b = a.b - b.a
 -- @-node:gcross.20091208183517.1444:~~
 -- @+node:gcross.20091208183517.1456:|^
 infixl 8 |^
-(|^) :: DifferentialOperator a -> Int -> DifferentialOperator a
+(|^) :: (a -> a) -> Int -> (a -> a)
 (|^) operator exponent
   | exponent < 0
     = error "Negative exponents not presently supported."
