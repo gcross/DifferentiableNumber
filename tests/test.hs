@@ -24,10 +24,23 @@ import Data.Differentiable.FunctionExpansion
 import Data.Differentiable.Number
 import Data.Differentiable.Quantum3D
 import Data.Differentiable.Testing
+-- @nonl
 -- @-node:gcross.20091208183517.1526:<< Import needed modules >>
 -- @nl
 
 -- @+others
+-- @+node:gcross.20091212141130.1606:Helpers
+-- @+node:gcross.20091212141130.1607:intFnType
+intFnType :: ((Integer,Integer,Integer) -> FunctionExpansion Integer) -> ((Integer,Integer,Integer) -> FunctionExpansion Integer)
+intFnType = id
+-- @-node:gcross.20091212141130.1607:intFnType
+-- @+node:gcross.20091212141130.1611:doubleFnType
+doubleFnType ::
+    ((Double,Double,Double) -> FunctionExpansion Double) ->
+    ((Double,Double,Double) -> FunctionExpansion Double)
+doubleFnType = id
+-- @-node:gcross.20091212141130.1611:doubleFnType
+-- @-node:gcross.20091212141130.1606:Helpers
 -- @-others
 
 main = defaultMain
@@ -97,6 +110,20 @@ main = defaultMain
             -- @-others
             ]
         -- @-node:gcross.20091212141130.1421:Functions
+        -- @+node:gcross.20091212141130.1594:Examples
+        ,testGroup "Examples"
+            -- @    @+others
+            -- @+node:gcross.20091212141130.1595:x^2
+            [testProperty "x^2" $
+                d X (v_ X * v_ X) === intFnType 2 * v_ X
+            -- @-node:gcross.20091212141130.1595:x^2
+            -- @+node:gcross.20091212141130.1613:sin x * cos x
+            ,testProperty "sin x * cos x" $
+                d X (sin (v_ X) * cos (v_ X)) =~= doubleFnType (cos (2 * (v_ X)))
+            -- @-node:gcross.20091212141130.1613:sin x * cos x
+            -- @-others
+            ]
+        -- @-node:gcross.20091212141130.1594:Examples
         -- @-others
         ]
     -- @-node:gcross.20091208183517.1577:Total derivatives

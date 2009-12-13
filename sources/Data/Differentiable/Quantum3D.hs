@@ -64,6 +64,16 @@ instance (Num a, Random a, Arbitrary a) => Arbitrary (FunctionExpansion a) where
         in argument :-> expansion
 -- @-node:gcross.20091208183517.1569:Arbitrary (FunctionExpansion a)
 -- @-node:gcross.20091208183517.1555:Instances
+-- @+node:gcross.20091212141130.1604:Functions
+-- @+node:gcross.20091212141130.1605:v_
+v_ :: Num a => Coordinate -> (a,a,a) -> FunctionExpansion a
+v_ coordinate argument@(vx,vy,vz) = [vx,vy,vz] :-> 
+    case coordinate of
+        X -> vx ::> [one,zero,zero]
+        Y -> vy ::> [zero,one,zero]
+        Z -> vz ::> [zero,zero,one]
+-- @-node:gcross.20091212141130.1605:v_
+-- @-node:gcross.20091212141130.1604:Functions
 -- @-others
 
 -- @-node:gcross.20091208183517.1432:@thin Quantum3D.hs

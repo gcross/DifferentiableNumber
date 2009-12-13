@@ -87,6 +87,10 @@ instance Floating a => Floating (FunctionExpansion a) where
 -- @-node:gcross.20091212141130.1440:Floating
 -- @-node:gcross.20091212141130.1582:FunctionExpansion
 -- @+node:gcross.20091212141130.1583:Function
+-- @+node:gcross.20091212141130.1597:Differentiable
+instance Differentiable b => Differentiable (a -> b) where
+    differentiateBy index f argument = differentiateBy index (f argument)
+-- @-node:gcross.20091212141130.1597:Differentiable
 -- @+node:gcross.20091212141130.1585:Show
 instance Show b => Show (a -> b) where
     show = undefined
@@ -148,13 +152,6 @@ binaryFunctionExpansionOperator op (argument1 :-> value1) (argument2 :-> value2)
         argument1 :-> (value1 `op` value2)
 -- @-node:gcross.20091212141130.1436:binaryFunctionExpansionOperator
 -- @-node:gcross.20091212141130.1433:Helpers
--- @+node:gcross.20091212141130.1576:Functions
--- @+node:gcross.20091212141130.1578:v_
-v_ :: (Enum i, Num a) => i -> [a] -> FunctionExpansion a
-v_ i argument = argument :-> ((argument !! index) ::> (replicate index zero ++ [one] ++ repeat zero))
-  where index = fromEnum i
--- @-node:gcross.20091212141130.1578:v_
--- @-node:gcross.20091212141130.1576:Functions
 -- @+node:gcross.20091208183517.1427:Differential Operators
 -- @+node:gcross.20091208183517.1431:multiplyByCoordinate
 multiplyByCoordinate :: (Num a, Enum i) => i -> DifferentialOperator a

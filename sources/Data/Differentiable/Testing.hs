@@ -29,12 +29,12 @@ import Data.Differentiable.Number
 -- @+node:gcross.20091209122152.1450:Operators
 -- @+node:gcross.20091209122152.1452:===
 infixl 4 ===
-(===) :: Eq a => DifferentialOperator a -> DifferentialOperator a -> FunctionExpansion a -> Bool
+(===) :: Eq b => (a -> b) -> (a -> b) -> a -> Bool
 (===) = liftA2 (==)
 -- @-node:gcross.20091209122152.1452:===
 -- @+node:gcross.20091209122152.1454:=~=
 infixl 4 =~=
-(=~=) :: AlmostEq a => DifferentialOperator a -> DifferentialOperator a -> FunctionExpansion a -> Bool
+(=~=) :: AlmostEq b => (a -> b) -> (a -> b) -> a -> Bool
 (=~=) = liftA2 (~=)
 -- @-node:gcross.20091209122152.1454:=~=
 -- @-node:gcross.20091209122152.1450:Operators
