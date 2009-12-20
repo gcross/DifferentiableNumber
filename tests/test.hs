@@ -17,7 +17,7 @@ import qualified SingleParticle as SP
 -- @-others
 
 main = defaultMain
-    [testGroup "Data.Differentiable.Number.Quantum.SingleParticle" SP.tests
+    [testGroup "Data.Differentiable.Number.Quantum" SP.tests
     ,testGroup "Data.Differentiable.Number.Quantum.MultiParticle" MP.tests
     ]
 -- @-node:gcross.20091220080702.1868:@thin test.hs

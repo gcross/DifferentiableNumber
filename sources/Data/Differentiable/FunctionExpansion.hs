@@ -27,6 +27,9 @@ import Data.Differentiable.Number
 -- @+node:gcross.20091208183517.1408:FunctionExpansion
 data FunctionExpansion a = [a] :-> DifferentiableNumber a
 -- @-node:gcross.20091208183517.1408:FunctionExpansion
+-- @+node:gcross.20091220080702.2373:DifferentiableFunction
+type DifferentiableFunction a = [a] -> FunctionExpansion a
+-- @-node:gcross.20091220080702.2373:DifferentiableFunction
 -- @+node:gcross.20091208183517.1413:DifferentialOperator
 type DifferentialOperator a = FunctionExpansion a -> FunctionExpansion a
 -- @-node:gcross.20091208183517.1413:DifferentialOperator
@@ -168,6 +171,13 @@ multiplyByCoordinate i (argument :-> expansion) = argument :-> (variable index (
   where index = fromEnum i
 -- @-node:gcross.20091208183517.1431:multiplyByCoordinate
 -- @-node:gcross.20091208183517.1427:Differential Operators
+-- @+node:gcross.20091220080702.2353:Differentiable Functions
+-- @+node:gcross.20091220080702.2355:v_
+v_ :: (Enum i, Num a) => i -> DifferentiableFunction a
+v_ i argument = argument :-> variable index (argument !! index)
+  where index = fromEnum i
+-- @-node:gcross.20091220080702.2355:v_
+-- @-node:gcross.20091220080702.2353:Differentiable Functions
 -- @+node:gcross.20091208183517.1442:Operators
 -- @+node:gcross.20091208183517.1458:*|
 infixl 7 *|

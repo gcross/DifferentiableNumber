@@ -31,9 +31,6 @@ p_ k = (-i) *| d k
 -- @-node:gcross.20091220080702.1839:p_
 -- @-node:gcross.20091220080702.1837:Quantum Operators
 -- @+node:gcross.20091220080702.1961:Types
--- @+node:gcross.20091220080702.1963:Position
-newtype Position a = Position [a]
--- @-node:gcross.20091220080702.1963:Position
 -- @+node:gcross.20091220080702.2343:XYZ
 data XYZ = X | Y | Z deriving (Show,Eq,Enum)
 -- @nonl
@@ -44,18 +41,6 @@ data XYZ = X | Y | Z deriving (Show,Eq,Enum)
 instance Arbitrary XYZ where
     arbitrary = elements [X,Y,Z]
 -- @-node:gcross.20091220080702.2345:XYZ
--- @+node:gcross.20091220080702.1959:Position
-instance Random a => Arbitrary (Position a) where
-    arbitrary = MkGen $ \stdgen size -> Position (randoms stdgen)
--- @-node:gcross.20091220080702.1959:Position
--- @+node:gcross.20091220080702.1960:FunctionExpansion
-instance (Num a, Random a, Arbitrary a) => Arbitrary (FunctionExpansion a) where
-    arbitrary = MkGen $ \gen size ->
-        let (gen1,gen2) = split gen
-            (Position argument) = unGen arbitrary gen1 size
-            expansion = unGen arbitrary gen2 size
-        in argument :-> expansion
--- @-node:gcross.20091220080702.1960:FunctionExpansion
 -- @-node:gcross.20091220080702.1957:Generators
 -- @-others
 -- @-node:gcross.20091220080702.1831:@thin Quantum.hs

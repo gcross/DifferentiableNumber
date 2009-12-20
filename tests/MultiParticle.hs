@@ -31,18 +31,6 @@ import Data.Differentiable.Quantum.MultiParticle
 -- @nl
 
 -- @+others
--- @+node:gcross.20091220080702.1927:Helpers
--- @+node:gcross.20091220080702.1928:intFnType
-intFnType :: ((Integer,Integer,Integer) -> FunctionExpansion Integer) -> ((Integer,Integer,Integer) -> FunctionExpansion Integer)
-intFnType = id
--- @-node:gcross.20091220080702.1928:intFnType
--- @+node:gcross.20091220080702.1929:doubleFnType
-doubleFnType ::
-    ((Double,Double,Double) -> FunctionExpansion Double) ->
-    ((Double,Double,Double) -> FunctionExpansion Double)
-doubleFnType = id
--- @-node:gcross.20091220080702.1929:doubleFnType
--- @-node:gcross.20091220080702.1927:Helpers
 -- @+node:gcross.20091220080702.1930:Tests
 tests =
     -- @    @+others

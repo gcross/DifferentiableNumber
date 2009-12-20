@@ -10,6 +10,7 @@ import Control.Applicative
 import Control.Monad
 
 import Data.Complex
+import Data.List
 import Data.Ratio
 
 import Debug.Trace
@@ -26,6 +27,15 @@ import Data.Differentiable.Number
 -- @nl
 
 -- @+others
+-- @+node:gcross.20091220080702.2365:Types
+-- @+node:gcross.20091220080702.2366:Argument
+newtype Argument a = Argument { getArg :: [a] }
+
+-- @-node:gcross.20091220080702.2366:Argument
+-- @+node:gcross.20091220080702.2399:ForceTypeToBe
+type ForceTypeToBe a = a -> a
+-- @-node:gcross.20091220080702.2399:ForceTypeToBe
+-- @-node:gcross.20091220080702.2365:Types
 -- @+node:gcross.20091209122152.1450:Operators
 -- @+node:gcross.20091209122152.1452:===
 infixl 4 ===
@@ -63,6 +73,10 @@ x /~ y = not (x ~= y)
 -- @-node:gcross.20091209122152.1449:AlmostEq
 -- @-node:gcross.20091209122152.1448:Classes
 -- @+node:gcross.20091209122152.1462:Instances
+-- @+node:gcross.20091220080702.2371:Show (Argument a)
+instance Show a => Show (Argument a) where
+    show argument = "[" ++ intercalate "," (map show . take 3 . getArg $ argument) ++ ",...]"
+-- @-node:gcross.20091220080702.2371:Show (Argument a)
 -- @+node:gcross.20091209122152.1464:Random (Complex a)
 instance (Random a, RealFloat a) => Random (Complex a) where
     randomR (lo_r :+ lo_i,hi_r :+ hi_i) g0 =
@@ -91,6 +105,18 @@ instance (Integral a, Random a) => Random (Ratio a) where
 instance (Arbitrary a, RealFloat a) => Arbitrary (Complex a) where
     arbitrary = liftM (:+ 0) $ (resize 1) arbitrary
 -- @-node:gcross.20091209122152.1461:Complex Double
+-- @+node:gcross.20091220080702.2368:Argument
+instance Random a => Arbitrary (Argument a) where
+    arbitrary = MkGen $ \stdgen size -> Argument (randoms stdgen)
+-- @-node:gcross.20091220080702.2368:Argument
+-- @+node:gcross.20091220080702.2370:FunctionExpansion
+instance (Num a, Random a, Arbitrary a) => Arbitrary (FunctionExpansion a) where
+    arbitrary = MkGen $ \gen size ->
+        let (gen1,gen2) = split gen
+            (Argument argument) = unGen arbitrary gen1 size
+            expansion = unGen arbitrary gen2 size
+        in argument :-> expansion
+-- @-node:gcross.20091220080702.2370:FunctionExpansion
 -- @-node:gcross.20091209122152.1459:Generators
 -- @+node:gcross.20091209122152.1468:Functions
 -- @+node:gcross.20091209122152.1469:echo
