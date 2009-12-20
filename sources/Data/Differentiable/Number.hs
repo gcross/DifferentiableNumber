@@ -8,6 +8,8 @@ module Data.Differentiable.Number where
 -- @+node:gcross.20091208160243.1239:<< Import needed modules >>
 import Control.Monad
 
+import Data.Complex
+
 import Data.Differentiable
 import qualified Data.Stream as Stream
 
@@ -21,6 +23,12 @@ import Test.QuickCheck
 -- @nl
 
 -- @+others
+-- @+node:gcross.20091220080702.1771:Values
+-- @+node:gcross.20091220080702.1772:i
+i :: RealFloat a => Complex a
+i = 0 :+ 1
+-- @-node:gcross.20091220080702.1772:i
+-- @-node:gcross.20091220080702.1771:Values
 -- @+node:gcross.20091208183517.1423:Functions
 -- @+node:gcross.20091208183517.1567:variable
 variable :: (Enum i, Num a) => i -> a -> DifferentiableNumber a

@@ -15,6 +15,8 @@ module Data.Differentiable.FunctionExpansion where
 import Control.Applicative
 import Control.Exception
 
+import Data.List
+
 import Data.Differentiable
 import Data.Differentiable.Number
 -- @-node:gcross.20091208183517.1412:<< Import needed modules >>
@@ -40,7 +42,7 @@ instance Differentiable (FunctionExpansion a) where
 -- @-node:gcross.20091208183517.1430:Differentiable
 -- @+node:gcross.20091208183517.1440:Show
 instance Show a => Show (FunctionExpansion a) where
-    show (argument :-> value) = show argument ++ " :-> " ++ show value
+    show (argument :-> value) = "[" ++ intercalate "," (map show (take 3 argument)) ++ ",...] :-> " ++ show value
 -- @-node:gcross.20091208183517.1440:Show
 -- @+node:gcross.20091208183517.1449:Eq
 instance Eq a => Eq (FunctionExpansion a) where

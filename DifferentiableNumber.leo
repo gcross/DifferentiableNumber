@@ -18,20 +18,27 @@
 <v t="gcross.20091208160243.1231"><vh>@path Differentiable</vh>
 <v t="gcross.20091208183517.1406"><vh>@thin FunctionExpansion.hs</vh></v>
 <v t="gcross.20091208160243.1233"><vh>@thin Number.hs</vh></v>
-<v t="gcross.20091208183517.1432"><vh>@thin Quantum3D.hs</vh></v>
+<v t="gcross.20091220080702.1831"><vh>@thin Quantum.hs</vh></v>
+<v t="gcross.20091220080702.1768"><vh>@path Quantum</vh>
+<v t="gcross.20091220080702.1787"><vh>@thin SingleParticle.hs</vh></v>
+<v t="gcross.20091220080702.1815"><vh>@thin MultiParticle.hs</vh></v>
+</v>
 <v t="gcross.20091209122152.1337"><vh>@thin Testing.hs</vh></v>
 </v>
 </v>
 </v>
 <v t="gcross.20091208183517.1523"><vh>@path tests</vh>
-<v t="gcross.20091208183517.1524"><vh>@thin test.hs</vh></v>
+<v t="gcross.20091220080702.1868"><vh>@thin test.hs</vh></v>
+<v t="gcross.20091208183517.1524"><vh>@thin SingleParticle.hs</vh></v>
+<v t="gcross.20091220080702.1924"><vh>@thin MultiParticle.hs</vh></v>
 </v>
 </vnodes>
 <tnodes>
 <t tx="gcross.20091208160243.1231"></t>
-<t tx="gcross.20091208160243.1232" str_leo_pos="4"></t>
+<t tx="gcross.20091208160243.1232" str_leo_pos="3"></t>
 <t tx="gcross.20091208160243.1235"></t>
 <t tx="gcross.20091208183517.1415"></t>
 <t tx="gcross.20091208183517.1523"></t>
+<t tx="gcross.20091220080702.1768"></t>
 </tnodes>
 </leo_file>
