@@ -21,15 +21,9 @@ import Data.Differentiable.Quantum
 -- @+others
 -- @+node:gcross.20091220080702.1789:Types
 -- @+node:gcross.20091220080702.1790:Coordinate
-data Coordinate = X | Y | Z deriving (Eq,Show,Enum)
+type Coordinate = XYZ
 -- @-node:gcross.20091220080702.1790:Coordinate
 -- @-node:gcross.20091220080702.1789:Types
--- @+node:gcross.20091220080702.1795:Generators
--- @+node:gcross.20091220080702.1796:Coordinate
-instance Arbitrary Coordinate where
-    arbitrary = elements [X,Y,Z]
--- @-node:gcross.20091220080702.1796:Coordinate
--- @-node:gcross.20091220080702.1795:Generators
 -- @+node:gcross.20091220080702.1799:Functions
 -- @+node:gcross.20091220080702.1800:v_
 v_ :: Num a => Coordinate -> (a,a,a) -> FunctionExpansion a

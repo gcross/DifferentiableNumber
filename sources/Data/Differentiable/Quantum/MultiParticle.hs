@@ -24,14 +24,13 @@ import Data.Differentiable
 import Data.Differentiable.FunctionExpansion
 import Data.Differentiable.Number
 import Data.Differentiable.Quantum
-import qualified Data.Differentiable.Quantum.SingleParticle as SP
 -- @-node:gcross.20091220080702.1816:<< Import needed modules >>
 -- @nl
 
 -- @+others
 -- @+node:gcross.20091220080702.1817:Types
 -- @+node:gcross.20091220080702.1818:Coordinate
-data Coordinate = Int :> SP.Coordinate deriving (Show,Eq)
+data Coordinate = Int :> XYZ deriving (Show,Eq)
 -- @-node:gcross.20091220080702.1818:Coordinate
 -- @-node:gcross.20091220080702.1817:Types
 -- @+node:gcross.20091220080702.1823:Instances
@@ -44,7 +43,7 @@ instance Enum Coordinate where
 -- @+node:gcross.20091220080702.1830:Generators
 -- @+node:gcross.20091220080702.1824:Coordinate
 instance Arbitrary Coordinate where
-    arbitrary = liftM2 (:>) (fmap abs $ resize 5 arbitrary) (elements [SP.X,SP.Y,SP.Z])
+    arbitrary = liftM2 (:>) (fmap abs $ resize 5 arbitrary) arbitrary
 -- @-node:gcross.20091220080702.1824:Coordinate
 -- @-node:gcross.20091220080702.1830:Generators
 -- @-others

@@ -34,8 +34,16 @@ p_ k = (-i) *| d k
 -- @+node:gcross.20091220080702.1963:Position
 newtype Position a = Position [a]
 -- @-node:gcross.20091220080702.1963:Position
+-- @+node:gcross.20091220080702.2343:XYZ
+data XYZ = X | Y | Z deriving (Show,Eq,Enum)
+-- @nonl
+-- @-node:gcross.20091220080702.2343:XYZ
 -- @-node:gcross.20091220080702.1961:Types
 -- @+node:gcross.20091220080702.1957:Generators
+-- @+node:gcross.20091220080702.2345:XYZ
+instance Arbitrary XYZ where
+    arbitrary = elements [X,Y,Z]
+-- @-node:gcross.20091220080702.2345:XYZ
 -- @+node:gcross.20091220080702.1959:Position
 instance Random a => Arbitrary (Position a) where
     arbitrary = MkGen $ \stdgen size -> Position (randoms stdgen)
