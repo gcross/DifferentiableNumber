@@ -213,6 +213,12 @@ osum = sum
 negosum = negate . osum
 -- @-node:gcross.20091208183517.1454:osum/negosum
 -- @-node:gcross.20091208183517.1442:Operators
+-- @+node:gcross.20091220115426.1518:Functions
+-- @+node:gcross.20091220115426.1519:eval
+eval :: FunctionExpansion a -> a
+eval (_ :-> (value ::> _)) = value
+-- @-node:gcross.20091220115426.1519:eval
+-- @-node:gcross.20091220115426.1518:Functions
 -- @-others
 
 -- @-node:gcross.20091208183517.1406:@thin FunctionExpansion.hs
